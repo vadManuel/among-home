@@ -1,0 +1,41 @@
+* {
+    font-family: 'Schoolbell', cursive;
+    font-size: 1rem;
+
+    /* pointer-events: none; */
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+li {
+    padding-top: 10px;
+}
+
+.nopointer {
+    pointer-events: none;
+}
+
+.app {
+    margin: 0px;
+    height: 100vh;
+    background-color: black;
+    background-image: url(./stuff/background.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}

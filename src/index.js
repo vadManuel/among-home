@@ -9,8 +9,8 @@ import { store, rrfProps } from './config'
 import './niceStuff.css'
 
 
-document.body.style.overflow = "hidden"
-document.body.classList.add("no-sroll")
+// document.body.style.overflow = "hidden"
+// document.body.classList.add("no-sroll")
 
 ReactDOM.render(
   <Provider store={store}>

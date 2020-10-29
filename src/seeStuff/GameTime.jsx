@@ -7,6 +7,7 @@ import useSound from 'use-sound'
 
 import doStuff from 'doStuff/doStuff'
 
+import body_reported from 'stuff/body_reported.png'
 import emergency_meeting from 'stuff/emergency_meeting.png'
 import pressed_report from 'stuff/pressed_report.png'
 import report from 'stuff/report.png'
@@ -14,6 +15,7 @@ import pressed_emergency from 'stuff/pressed_emergency.png'
 import emergency from 'stuff/emergency.png'
 
 import emergency_sound from 'stuff/emergency.mp3'
+import body_reported_sound from 'stuff/body_reported.mp3'
 
 import { todo, working, done } from 'seeStuff/colorStuff'
 import { useSelector } from 'react-redux'
@@ -24,7 +26,8 @@ const timers = [30, 45, 120]
 const timerLabels = ['Go to the discussion table', 'Discussion time', 'Voting time']
 
 function GameTime() {
-	const [play] = useSound(emergency_sound)
+	const [playEmergency] = useSound(emergency_sound)
+	const [playReport] = useSound(body_reported_sound)
 
 	const [reports, emergencies, o2_sabotages, reactor_sabotages] = useSelector(state => [
 		state.firestore.ordered.reports,
@@ -41,22 +44,30 @@ function GameTime() {
 	const [latest, setLatest] = React.useState(false)
 
 	React.useEffect(() => {
-		if (reports) {
+		if (reports || emergencies) {
 			if (latest) {
-				if (reports[0] && reports[0].time) {
+				if (reports && reports[0] && reports[0].time) {
 					const latestReport = moment(reports[0].time.toDate())
 					if (latest.isBefore(latestReport)) {
-						console.log('alarm')
-						play()
+						playReport()
 						setLatest(moment(reports[0].time.toDate()))
 						setUltraTouched('reports')
+					}
+				}
+				
+				if (emergencies && emergencies[0] && emergencies[0].time) {
+					const latestEmergency = moment(emergencies[0].time.toDate())
+					if (latest.isBefore(latestEmergency)) {
+						playEmergency()
+						setLatest(moment(emergencies[0].time.toDate()))
+						setUltraTouched('emergencies')
 					}
 				}
 			} else {
 				setLatest(moment())
 			}
 		}
-	}, [reports, emergencies, o2_sabotages, reactor_sabotages, latest, play])
+	}, [reports, emergencies, o2_sabotages, reactor_sabotages, latest, playEmergency, playReport])
 
 	const handleTouch = React.useCallback((whatTouch) => {
 		setSuperTouched(whatTouch)
@@ -78,7 +89,7 @@ function GameTime() {
 				<Grid item>
 					<img
 						className='nopointer'
-						src={emergency_meeting}
+						src={isUltraTouched === 'reports' ? body_reported : emergency_meeting}
 						style={{
 							maxWidth: '100vw',
 							height: 'auto'
